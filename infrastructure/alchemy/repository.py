@@ -1,4 +1,6 @@
-from sqlalchemy import select
+from typing import Iterable, Mapping
+
+from sqlalchemy import select, insert
 
 from infrastructure.abstract.abstract_repository import Repository
 
@@ -8,11 +10,29 @@ class SQLAlchemyRepository(Repository):
         self.model = model
         self.session = session
 
-    async def create(self, **kwargs):
+    async def create(self, commit: bool = True, **kwargs):
         instance = self.model(**kwargs)
         self.session.add(instance)
-        await self.session.commit()
-        return instance.to_read_model()
+
+        if commit:
+            await self.session.commit()
+        else:
+            await self.session.flush()
+
+        return instance
+
+    async def bulk_create(self, objects: Iterable[Mapping], commit: bool = True):
+
+        created = await self.session.execute(
+            insert(self.model).returning(self.model), objects
+        )
+
+        if commit:
+            await self.session.commit()
+        else:
+            await self.session.flush()
+
+        return created.all()
 
     async def list(self, **kwargs):
         stmt = select(self.model)

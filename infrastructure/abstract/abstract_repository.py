@@ -2,9 +2,12 @@ from abc import abstractmethod, ABC
 
 
 class Repository(ABC):
+    @abstractmethod
+    async def bulk_create(self, objects: list[dict], commit: bool = True):
+        raise NotImplementedError()
 
     @abstractmethod
-    async def create(self, **kwargs):
+    async def create(self, commit: bool = True, **kwargs):
         raise NotImplementedError()
 
     @abstractmethod
