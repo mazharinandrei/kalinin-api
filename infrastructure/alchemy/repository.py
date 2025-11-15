@@ -17,6 +17,7 @@ class SQLAlchemyRepository(Repository):
 
         if commit:
             await self.session.commit()
+
         else:
             await self.session.flush()
 
@@ -29,13 +30,14 @@ class SQLAlchemyRepository(Repository):
             insert(self.model).returning(self.model), objects
         )
 
-        entities = [await self.mapper.to_entity(instance) for instance in created.all()]
-
         if commit:
             await self.session.commit()
         else:
             await self.session.flush()
 
+        entities = [
+            await self.mapper.to_entity(instance[0]) for instance in created.all()
+        ]
         return entities
 
     async def list(self, **kwargs):

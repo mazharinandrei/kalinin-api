@@ -13,14 +13,20 @@ class SQLAlchemyRuleMapper(AbstractSQLAlchemyMapper):
         trigger_mapper = SQLAlchemyTriggerMapper()
         reply_option_mapper = SQLAlchemyReplyOptionMapper()
 
-        triggers = [
-            await trigger_mapper.to_entity(trigger) for trigger in model.triggers
-        ]
+        try:
+            triggers = [
+                await trigger_mapper.to_entity(trigger) for trigger in model.triggers
+            ]
+        except Exception:
+            triggers = []
 
-        reply_options = [
-            await reply_option_mapper.to_entity(reply_option)
-            for reply_option in model.reply_options
-        ]
+        try:
+            reply_options = [
+                await reply_option_mapper.to_entity(reply_option)
+                for reply_option in model.reply_options
+            ]
+        except Exception:
+            reply_options = []
 
         return RuleEntity(id=model.id, triggers=triggers, reply_options=reply_options)
 

@@ -6,7 +6,8 @@ from infrastructure.alchemy.models.rule import Trigger
 class SQLAlchemyTriggerMapper(AbstractSQLAlchemyMapper):
     @staticmethod
     async def to_entity(model: Trigger) -> TriggerEntity:
-        return TriggerEntity(int(model.id), str(model.text))
+
+        return TriggerEntity(id=int(model.id), text=str(model.text))
 
     @staticmethod
     async def to_orm(entity: TriggerEntity) -> Trigger:
