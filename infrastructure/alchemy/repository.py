@@ -43,7 +43,7 @@ class SQLAlchemyRepository(Repository):
     async def list(self, **kwargs):
         stmt = select(self.model)
         res = await self.session.execute(stmt)
-        entities = [await self.mapper.to_entity(row[0]) for row in res.all()]
+        entities = [self.mapper.to_entity(row[0]) for row in res.all()]
         return entities
 
     async def get(self, **kwargs):

@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 
 from domain.crud import CRUDService
+from domain.enities.reply_option import ReplyOptionEntity
 from domain.enities.rule import RuleEntity
+from domain.enities.trigger import TriggerEntity
 from infrastructure.abstract.abstract_repository import Repository
-from infrastructure.alchemy.models.rule import Rule
 
 
 @dataclass
@@ -12,24 +13,20 @@ class RuleService(CRUDService):
     reply_option_repository: Repository
 
     async def create(self, data: dict):
-        triggers = await self.trigger_repository.bulk_create(
-            objects=[{"text": trigger} for trigger in data["triggers"]], commit=False
+
+        trigger_entities = [TriggerEntity(text=text) for text in data["triggers"]]
+
+        reply_option_entities = [
+            ReplyOptionEntity(text=text) for text in data["reply_options"]
+        ]
+
+        rule_entity = RuleEntity(
+            triggers=trigger_entities, reply_options=reply_option_entities
         )
 
-        reply_options = await self.reply_option_repository.bulk_create(
-            objects=[{"text": option} for option in data["reply_options"]], commit=False
-        )
+        self.repository.session.add(self.repository.mapper.to_orm(rule_entity))
 
-        rule = RuleEntity(triggers=triggers, reply_options=reply_options)
-
-        rule.triggers = triggers
-        rule.reply_options = reply_options
-
-        orm_rule = await self.repository.mapper.to_orm(rule)
-        self.repository.session.add(orm_rule)
         await self.repository.session.commit()
-
-        return rule
 
     async def update(self, pk, **data):
 

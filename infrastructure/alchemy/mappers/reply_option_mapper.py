@@ -5,11 +5,11 @@ from infrastructure.alchemy.models.rule import ReplyOption
 
 class SQLAlchemyReplyOptionMapper(AbstractSQLAlchemyMapper):
     @staticmethod
-    async def to_entity(model: ReplyOption) -> ReplyOptionEntity:
+    def to_entity(model: ReplyOption) -> ReplyOptionEntity:
         return ReplyOptionEntity(int(model.id), str(model.text))
 
     @staticmethod
-    async def to_orm(entity: ReplyOptionEntity) -> ReplyOption:
+    def to_orm(entity: ReplyOptionEntity) -> ReplyOption:
         reply_option = ReplyOption()
         reply_option.id = entity.id
         reply_option.text = entity.text
