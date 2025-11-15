@@ -3,8 +3,9 @@ from typing import List
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
 
-from schemas.schemas import ReadTrigger, ReadReplyOption, ReadRule
+
 from infrastructure.alchemy.db import Base, int_pk
+from schemas.rules import ReadTrigger, ReadReplyOption, ReadRule
 
 
 class Trigger(Base):
