@@ -8,10 +8,7 @@ class CRUDService:
 
     async def create(self, data: dict):
         res = await self.repository.create(**data)
-        # вынес .to_read_model() из репозитория,
-        # так как этот метод ломает создание Rule
-        # текущее решение - неправильное, так как создаёт зависимость от модели sqlalchemy
-        return res.to_read_model()
+        return res
 
     async def list(self):
         res = await self.repository.list()

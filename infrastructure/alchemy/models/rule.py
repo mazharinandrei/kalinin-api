@@ -5,25 +5,16 @@ from sqlalchemy.orm import Mapped, relationship
 
 
 from infrastructure.alchemy.db import Base, int_pk
-from schemas.rules import ReadTrigger, ReadReplyOption, ReadRule
 
 
 class Trigger(Base):
-    read_schema = ReadTrigger
     id: Mapped[int_pk]
     text: Mapped[str]
-
-    def to_read_model(self):
-        return self.read_schema(id=self.id, text=self.text)
 
 
 class ReplyOption(Base):
-    read_schema = ReadReplyOption
     id: Mapped[int_pk]
     text: Mapped[str]
-
-    def to_read_model(self):
-        return self.read_schema(id=self.id, text=self.text)
 
 
 rule_triggers = Table(
@@ -48,7 +39,6 @@ rule_reply_options = Table(
 
 
 class Rule(Base):
-    read_schema = ReadRule
     id: Mapped[int_pk]
     triggers: Mapped[List[Trigger]] = relationship(
         "Trigger",
@@ -65,10 +55,3 @@ class Rule(Base):
         lazy="selectin",
         cascade="all",
     )
-
-    def to_read_model(self):
-        return self.read_schema(
-            id=self.id,
-            triggers=[trigger.text for trigger in self.triggers],
-            reply_options=[response.text for response in self.reply_options],
-        )

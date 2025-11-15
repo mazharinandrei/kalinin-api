@@ -6,9 +6,10 @@ from infrastructure.abstract.abstract_repository import Repository
 
 
 class SQLAlchemyRepository(Repository):
-    def __init__(self, model, session):
+    def __init__(self, model, session, mapper):
         self.model = model
         self.session = session
+        self.mapper = mapper
 
     async def create(self, commit: bool = True, **kwargs):
         instance = self.model(**kwargs)
@@ -19,7 +20,8 @@ class SQLAlchemyRepository(Repository):
         else:
             await self.session.flush()
 
-        return instance
+        entity = await self.mapper.to_entity(instance)
+        return entity
 
     async def bulk_create(self, objects: Iterable[Mapping], commit: bool = True):
 
@@ -27,25 +29,28 @@ class SQLAlchemyRepository(Repository):
             insert(self.model).returning(self.model), objects
         )
 
+        entities = [await self.mapper.to_entity(instance) for instance in created.all()]
+
         if commit:
             await self.session.commit()
         else:
             await self.session.flush()
 
-        return created.all()
+        return entities
 
     async def list(self, **kwargs):
         stmt = select(self.model)
         res = await self.session.execute(stmt)
-        res = [row[0].to_read_model() for row in res.all()]
-        return res
+        entities = [await self.mapper.to_entity(row[0]) for row in res.all()]
+        return entities
 
     async def get(self, **kwargs):
         stmt = select(self.model).filter_by(**kwargs)
         res = await self.session.execute(stmt)
         res = res.scalar_one_or_none()
         if res:
-            return res.to_read_model()
+            entity = await self.mapper.to_entity(res)
+            return entity
         return None
 
     async def update(self, pk, **data):
@@ -57,7 +62,8 @@ class SQLAlchemyRepository(Repository):
             setattr(instance, field, value)
 
         await self.session.commit()
-        return instance.to_read_model()
+        entity = await self.mapper.to_entity(instance)
+        return entity
 
     async def delete(self, pk):
         stmt = select(self.model).filter_by(id=pk)
