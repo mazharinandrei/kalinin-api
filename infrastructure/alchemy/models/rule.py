@@ -1,20 +1,19 @@
 from typing import List
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.orm import Mapped, relationship
-
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from infrastructure.alchemy.db import Base, int_pk
 
 
 class Trigger(Base):
     id: Mapped[int_pk]
-    text: Mapped[str]
+    text: Mapped[str] = mapped_column(unique=True)
 
 
 class ReplyOption(Base):
     id: Mapped[int_pk]
-    text: Mapped[str]
+    text: Mapped[str] = mapped_column(unique=True)
 
 
 rule_triggers = Table(
