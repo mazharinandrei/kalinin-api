@@ -43,7 +43,10 @@ class SQLAlchemyRepository(Repository):
     async def get(self, **kwargs):
         stmt = select(self.model).filter_by(**kwargs)
         res = await self.session.execute(stmt)
-        return res.scalar_one_or_none().to_read_model()
+        res = res.scalar_one_or_none()
+        if res:
+            return res.to_read_model()
+        return None
 
     async def update(self, pk, **data):
         stmt = select(self.model).filter_by(id=pk).with_for_update(nowait=True)
