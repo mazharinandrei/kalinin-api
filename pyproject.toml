@@ -5,6 +5,7 @@ description = "API for my chatbot"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "alembic>=1.17.2",
     "asyncpg>=0.30.0",
     "fastapi>=0.121.1",
     "pydantic-settings>=2.12.0",
