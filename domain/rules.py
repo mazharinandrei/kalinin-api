@@ -24,7 +24,8 @@ class RuleService(CRUDService):
             triggers=trigger_entities, reply_options=reply_option_entities
         )
 
-        await self.repository.save(rule_entity)
+        saved_entity = await self.repository.save(rule_entity)
+        return saved_entity
 
     async def update(self, pk, **data):
 
