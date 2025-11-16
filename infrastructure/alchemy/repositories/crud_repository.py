@@ -51,7 +51,7 @@ class SQLAlchemyCRUDRepository(Repository):
         res = await self.session.execute(stmt)
         res = res.scalar_one_or_none()
         if res:
-            entity = await self.mapper.to_entity(res)
+            entity = self.mapper.to_entity(res)
             return entity
         return None
 
