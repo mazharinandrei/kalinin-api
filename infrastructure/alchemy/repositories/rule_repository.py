@@ -40,7 +40,15 @@ class SQLAlchemyRuleRepository(SQLAlchemyCRUDRepository):
 
     async def save(self, entity: RuleEntity):
 
-        rule_orm = self.model()
+        if entity.id:
+            rule_orm = await self.session.execute(
+                select(self.model).filter_by(id=entity.id)
+            )
+            rule_orm = rule_orm.scalar_one_or_none()
+
+        else:
+            rule_orm = self.model()
+
         rule_orm.triggers = await self._bulk_get_or_create(
             entities=entity.triggers, model=Trigger, unique_field="text"
         )
@@ -55,4 +63,4 @@ class SQLAlchemyRuleRepository(SQLAlchemyCRUDRepository):
         return entity
 
     async def update(self, **kwargs):
-        raise NotImplementedError("рано ещё!")
+        raise NotImplementedError("That repo only supports the save method")

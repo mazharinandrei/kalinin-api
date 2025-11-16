@@ -6,4 +6,4 @@ from infrastructure.alchemy.models.rule import ReplyOption
 class SQLAlchemyReplyOptionMapper(AbstractSQLAlchemyMapper):
     @staticmethod
     def to_entity(model: ReplyOption) -> ReplyOptionEntity:
-        return ReplyOptionEntity(int(model.id), str(model.text))
+        return ReplyOptionEntity(id=int(model.id), text=str(model.text))

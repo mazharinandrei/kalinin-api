@@ -28,5 +28,16 @@ class RuleService(CRUDService):
         return saved_entity
 
     async def update(self, pk, **data):
+        trigger_entities = [TriggerEntity(text=text) for text in data["triggers"]]
 
-        raise NotImplementedError("рано ещё!")
+        reply_option_entities = [
+            ReplyOptionEntity(text=text) for text in data["reply_options"]
+        ]
+
+        rule_entity = RuleEntity(
+            id=pk, triggers=trigger_entities, reply_options=reply_option_entities
+        )
+
+        saved_entity = await self.repository.save(rule_entity)
+
+        return saved_entity
