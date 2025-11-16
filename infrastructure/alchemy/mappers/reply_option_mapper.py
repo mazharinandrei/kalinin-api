@@ -7,10 +7,3 @@ class SQLAlchemyReplyOptionMapper(AbstractSQLAlchemyMapper):
     @staticmethod
     def to_entity(model: ReplyOption) -> ReplyOptionEntity:
         return ReplyOptionEntity(int(model.id), str(model.text))
-
-    @staticmethod
-    def to_orm(entity: ReplyOptionEntity) -> ReplyOption:
-        reply_option = ReplyOption()
-        reply_option.id = entity.id
-        reply_option.text = entity.text
-        return reply_option

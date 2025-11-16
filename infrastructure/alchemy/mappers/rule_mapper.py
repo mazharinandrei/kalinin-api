@@ -27,22 +27,3 @@ class SQLAlchemyRuleMapper(AbstractSQLAlchemyMapper):
             reply_options = []
 
         return RuleEntity(id=model.id, triggers=triggers, reply_options=reply_options)
-
-    @staticmethod
-    def to_orm(entity: RuleEntity) -> Rule:
-        rule = Rule()
-
-        trigger_mapper = SQLAlchemyTriggerMapper()
-        reply_option_mapper = SQLAlchemyReplyOptionMapper()
-
-        triggers = [trigger_mapper.to_orm(trigger) for trigger in entity.triggers]
-
-        reply_options = [
-            reply_option_mapper.to_orm(reply_option)
-            for reply_option in entity.reply_options
-        ]
-
-        rule.triggers = triggers
-        rule.reply_options = reply_options
-
-        return rule

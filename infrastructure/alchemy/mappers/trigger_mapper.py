@@ -8,10 +8,3 @@ class SQLAlchemyTriggerMapper(AbstractSQLAlchemyMapper):
     def to_entity(model: Trigger) -> TriggerEntity:
 
         return TriggerEntity(id=int(model.id), text=str(model.text))
-
-    @staticmethod
-    def to_orm(entity: TriggerEntity) -> Trigger:
-        model = Trigger()
-        model.id = entity.id
-        model.text = entity.text
-        return model
