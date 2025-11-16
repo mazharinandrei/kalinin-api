@@ -40,7 +40,7 @@ async def add_rule(
     return {"data": new_obj}
 
 
-@router.patch("/rules/{rule_id}")
+@router.put("/rules/{rule_id}")
 async def update_rule(
     rule_id: int,
     rule: CreateRule,
