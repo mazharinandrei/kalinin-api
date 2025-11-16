@@ -7,39 +7,45 @@ from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRe
 
 class SQLAlchemyRuleRepository(SQLAlchemyCRUDRepository):
 
-    async def bulk_get_or_create(self, model, entities):
-        """
-        упоминается поле text, которого не должно быть
-        """
-        orms = []
+    async def _bulk_get_or_create(self, model, entities, unique_field):
 
-        existing_orms = await self.session.execute(
-            select(model).where(model.text.in_([entity.text for entity in entities]))
+        orm_objects = []
+
+        existing_orm_objects = await self.session.execute(
+            select(model).where(
+                getattr(model, unique_field).in_(
+                    [getattr(entity, unique_field) for entity in entities]
+                )
+            )
         )
 
-        existing_orms = existing_orms.scalars()
+        existing_orm_objects = existing_orm_objects.scalars()
 
-        orms_by_text = {
-            existing_trigger.text: existing_trigger
-            for existing_trigger in existing_orms
+        orm_objects_by_unique_field = {
+            getattr(existing_object, unique_field): existing_object
+            for existing_object in existing_orm_objects
         }
 
         for entity in entities:
-            if entity.text in orms_by_text:
-                orms.append(orms_by_text[entity.text])
+            if getattr(entity, unique_field) in orm_objects_by_unique_field:
+                orm_objects.append(
+                    orm_objects_by_unique_field[getattr(entity, unique_field)]
+                )
             else:
-                orms.append(model(text=entity.text))
+                orm_objects.append(
+                    model(**{unique_field: getattr(entity, unique_field)})
+                )
 
-        return orms
+        return orm_objects
 
     async def save(self, entity: RuleEntity):
 
         rule_orm = self.model()
-        rule_orm.triggers = await self.bulk_get_or_create(
-            entities=entity.triggers, model=Trigger
+        rule_orm.triggers = await self._bulk_get_or_create(
+            entities=entity.triggers, model=Trigger, unique_field="text"
         )
-        rule_orm.reply_options = await self.bulk_get_or_create(
-            model=ReplyOption, entities=entity.reply_options
+        rule_orm.reply_options = await self._bulk_get_or_create(
+            model=ReplyOption, entities=entity.reply_options, unique_field="text"
         )
 
         self.session.add(rule_orm)
