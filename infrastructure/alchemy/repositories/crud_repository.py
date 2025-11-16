@@ -64,7 +64,7 @@ class SQLAlchemyCRUDRepository(Repository):
             setattr(instance, field, value)
 
         await self.session.commit()
-        entity = await self.mapper.to_entity(instance)
+        entity = self.mapper.to_entity(instance)
         return entity
 
     async def delete(self, pk):
