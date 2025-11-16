@@ -24,9 +24,7 @@ class RuleService(CRUDService):
             triggers=trigger_entities, reply_options=reply_option_entities
         )
 
-        self.repository.session.add(self.repository.mapper.to_orm(rule_entity))
-
-        await self.repository.session.commit()
+        await self.repository.save(rule_entity)
 
     async def update(self, pk, **data):
 

@@ -5,7 +5,7 @@ from sqlalchemy import select, insert
 from infrastructure.abstract.abstract_repository import Repository
 
 
-class SQLAlchemyRepository(Repository):
+class SQLAlchemyCRUDRepository(Repository):
     def __init__(self, model, session, mapper):
         self.model = model
         self.session = session
