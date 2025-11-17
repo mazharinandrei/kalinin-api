@@ -5,7 +5,7 @@ from starlette import status
 
 from dependencies import rules_service
 from domain.rules import RuleService
-from schemas.rules import CreateRule
+from schemas.rules import CreateRule, ExtendRule
 
 router = APIRouter(prefix="", tags=["Rules"])
 
@@ -47,6 +47,16 @@ async def update_rule(
     service: Annotated[RuleService, Depends(rules_service)],
 ) -> dict:
     updated = await service.update(pk=rule_id, **rule.model_dump())
+    return {"data": updated}
+
+
+@router.patch("/rules/{rule_id}")
+async def extend_rule(
+    rule_id: int,
+    rule: ExtendRule,
+    service: Annotated[RuleService, Depends(rules_service)],
+) -> dict:
+    updated = await service.extend(pk=rule_id, **rule.model_dump())
     return {"data": updated}
 
 

@@ -60,7 +60,7 @@ class SQLAlchemyRuleRepository(SQLAlchemyCRUDRepository):
 
         await self.session.commit()
 
-        return entity
+        return self.mapper.to_entity(rule_orm)
 
     async def update(self, **kwargs):
         raise NotImplementedError("That repo only supports the save method")
