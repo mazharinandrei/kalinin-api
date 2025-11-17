@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ReadTrigger(BaseModel):
@@ -18,5 +18,5 @@ class ReadRule(BaseModel):
 
 
 class CreateRule(BaseModel):
-    triggers: list[str]
-    reply_options: list[str]
+    triggers: List[str] = Field(min_length=1)
+    reply_options: List[str] = Field(min_length=1)
