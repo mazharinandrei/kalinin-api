@@ -1,4 +1,4 @@
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, func
 from sqlalchemy.orm import joinedload
 
 from domain.enities.rule import RuleEntity
@@ -13,8 +13,9 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
     async def find_by_triggers(self, triggers: list[TriggerEntity]) -> tuple[RuleEntity]:
         patterns = triggers
 
-        like_conditions = [
-            Trigger.text.like(f"%{p}%") for p in patterns
+        conditions = [
+            func.lower(pattern).like('%' + func.lower(Trigger.text) + '%')
+            for pattern in patterns
         ]
 
         stmt = (
@@ -25,7 +26,7 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
                 joinedload(Rule.triggers),
                 joinedload(Rule.reply_options),
             )
-            .where(or_(*like_conditions))
+            .where(or_(*conditions))
             .distinct()
         )
 
