@@ -7,4 +7,6 @@ from domain.enities.trigger import TriggerEntity
 
 class RuleRepository(Repository):
     @abstractmethod
-    async def find_by_triggers(self, triggers: list[TriggerEntity]) -> list[RuleEntity]: ...
+    async def find_by_triggers(
+        self, triggers: list[TriggerEntity]
+    ) -> list[RuleEntity]: ...

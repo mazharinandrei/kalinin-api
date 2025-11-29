@@ -1,4 +1,3 @@
-
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,7 +19,9 @@ rule_triggers = Table(
     Base.metadata,
     Column("rule_id", ForeignKey("rules.id", ondelete="CASCADE"), primary_key=True),
     Column(
-        "trigger_id", ForeignKey("triggers.id", ondelete="CASCADE"), primary_key=True,
+        "trigger_id",
+        ForeignKey("triggers.id", ondelete="CASCADE"),
+        primary_key=True,
     ),
 )
 

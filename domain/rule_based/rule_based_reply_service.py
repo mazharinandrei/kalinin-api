@@ -14,13 +14,12 @@ class RuleBasedReplyService(ReplyService):
     universal_reply_repository: Repository
 
     async def get_reply(self, input_message: str):
-
-        rules: list[RuleEntity] = await self.rule_repository.find_by_triggers(input_message.split())
+        rules: list[RuleEntity] = await self.rule_repository.find_by_triggers(
+            input_message.split()
+        )
 
         all_options = [
-            option
-            for rule in rules or []
-            for option in (rule.reply_options or [])
+            option for rule in rules or [] for option in (rule.reply_options or [])
         ]
 
         if not all_options:

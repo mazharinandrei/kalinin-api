@@ -30,7 +30,8 @@ async def add_universal_reply(
 
 @router.get("/universal-replies/{reply_id}")
 async def detail_universal_reply(
-    reply_id: int, service: Annotated[CRUDService, Depends(universal_replies_service)],
+    reply_id: int,
+    service: Annotated[CRUDService, Depends(universal_replies_service)],
 ) -> dict:
     reply = await service.get(reply_id)
 

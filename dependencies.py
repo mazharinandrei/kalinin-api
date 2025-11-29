@@ -33,13 +33,19 @@ def rules_service() -> RuleService:
     session = async_session_maker()
     return RuleService(
         repository=SQLAlchemyRuleRepository(
-            model=Rule, session=session, mapper=SQLAlchemyRuleMapper,
+            model=Rule,
+            session=session,
+            mapper=SQLAlchemyRuleMapper,
         ),
         trigger_repository=SQLAlchemyCRUDRepository(
-            model=Trigger, session=session, mapper=SQLAlchemyTriggerMapper,
+            model=Trigger,
+            session=session,
+            mapper=SQLAlchemyTriggerMapper,
         ),
         reply_option_repository=SQLAlchemyCRUDRepository(
-            model=ReplyOption, session=session, mapper=SQLAlchemyReplyOptionMapper,
+            model=ReplyOption,
+            session=session,
+            mapper=SQLAlchemyReplyOptionMapper,
         ),
     )
 
@@ -47,8 +53,12 @@ def rules_service() -> RuleService:
 def reply_service() -> ReplyService:
     session = async_session_maker()
     return RuleBasedReplyService(
-        trigger_repository=SQLAlchemyCRUDRepository(model=Trigger, session=session, mapper=SQLAlchemyTriggerMapper),
-        rule_repository=SQLAlchemyRuleRepository(model=Rule, session=session, mapper=SQLAlchemyRuleMapper),
+        trigger_repository=SQLAlchemyCRUDRepository(
+            model=Trigger, session=session, mapper=SQLAlchemyTriggerMapper
+        ),
+        rule_repository=SQLAlchemyRuleRepository(
+            model=Rule, session=session, mapper=SQLAlchemyRuleMapper
+        ),
         universal_reply_repository=SQLAlchemyCRUDRepository(
             model=UniversalReply,
             session=async_session_maker(),

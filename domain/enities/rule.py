@@ -6,7 +6,6 @@ from domain.enities.trigger import TriggerEntity
 
 @dataclass
 class RuleEntity:
-
     triggers: list[TriggerEntity]
     reply_options: list[ReplyOptionEntity]
 

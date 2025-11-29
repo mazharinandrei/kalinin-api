@@ -17,7 +17,8 @@ int_pk = Annotated[int, mapped_column(primary_key=True)]
 uuid_pk = Annotated[uuid.UUID, mapped_column(primary_key=True, default=uuid.uuid4)]
 created_at = Annotated[datetime, mapped_column(server_default=func.now())]
 updated_at = Annotated[
-    datetime, mapped_column(server_default=func.now(), onupdate=datetime.now),
+    datetime,
+    mapped_column(server_default=func.now(), onupdate=datetime.now),
 ]
 str_uniq = Annotated[str, mapped_column(unique=True, nullable=False)]
 str_null_true = Annotated[str, mapped_column(nullable=True)]

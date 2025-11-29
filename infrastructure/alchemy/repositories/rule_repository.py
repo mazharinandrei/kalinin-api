@@ -9,8 +9,9 @@ from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRe
 
 
 class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
-
-    async def find_by_triggers(self, triggers: list[TriggerEntity]) -> tuple[RuleEntity]:
+    async def find_by_triggers(
+        self, triggers: list[TriggerEntity]
+    ) -> tuple[RuleEntity]:
         patterns = triggers
 
         conditions = [
@@ -35,7 +36,6 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
         return tuple(self.mapper.to_entity(orm) for orm in result)
 
     async def _bulk_get_or_create(self, model, entities, unique_field):
-
         orm_objects = []
 
         existing_orm_objects = await self.session.execute(
@@ -66,7 +66,6 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
         return orm_objects
 
     async def save(self, entity: RuleEntity):
-
         if entity.id:
             rule_orm = await self.session.execute(
                 select(self.model).filter_by(id=entity.id),
@@ -77,10 +76,14 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
             rule_orm = self.model()
 
         rule_orm.triggers = await self._bulk_get_or_create(
-            entities=entity.triggers, model=Trigger, unique_field="text",
+            entities=entity.triggers,
+            model=Trigger,
+            unique_field="text",
         )
         rule_orm.reply_options = await self._bulk_get_or_create(
-            model=ReplyOption, entities=entity.reply_options, unique_field="text",
+            model=ReplyOption,
+            entities=entity.reply_options,
+            unique_field="text",
         )
 
         self.session.add(rule_orm)
