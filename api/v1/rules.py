@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from dependencies import rules_service
@@ -21,7 +21,7 @@ async def list_rules(
 
 @router.get("/rules/{rule_id}")
 async def detail_rule(
-    rule_id: int, service: Annotated[RuleService, Depends(rules_service)]
+    rule_id: int, service: Annotated[RuleService, Depends(rules_service)],
 ) -> dict:
     rule = await service.get(rule_id)
 

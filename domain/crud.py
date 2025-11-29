@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from infrastructure.abstract.abstract_repository import Repository
 
 

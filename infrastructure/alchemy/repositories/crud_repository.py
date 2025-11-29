@@ -1,6 +1,6 @@
-from typing import Iterable, Mapping
+from collections.abc import Iterable, Mapping
 
-from sqlalchemy import select, insert
+from sqlalchemy import insert, select
 
 from infrastructure.abstract.abstract_repository import Repository
 
@@ -27,7 +27,7 @@ class SQLAlchemyCRUDRepository(Repository):
     async def bulk_create(self, objects: Iterable[Mapping], commit: bool = True):
 
         created = await self.session.execute(
-            insert(self.model).returning(self.model), objects
+            insert(self.model).returning(self.model), objects,
         )
 
         if commit:

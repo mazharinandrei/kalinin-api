@@ -1,7 +1,6 @@
-from typing import List
 
-from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from infrastructure.alchemy.db import Base, int_pk
 
@@ -21,7 +20,7 @@ rule_triggers = Table(
     Base.metadata,
     Column("rule_id", ForeignKey("rules.id", ondelete="CASCADE"), primary_key=True),
     Column(
-        "trigger_id", ForeignKey("triggers.id", ondelete="CASCADE"), primary_key=True
+        "trigger_id", ForeignKey("triggers.id", ondelete="CASCADE"), primary_key=True,
     ),
 )
 
@@ -39,7 +38,7 @@ rule_reply_options = Table(
 
 class Rule(Base):
     id: Mapped[int_pk]
-    triggers: Mapped[List[Trigger]] = relationship(
+    triggers: Mapped[list[Trigger]] = relationship(
         "Trigger",
         secondary=rule_triggers,
         passive_deletes=True,
@@ -47,7 +46,7 @@ class Rule(Base):
         cascade="all",
     )
 
-    reply_options: Mapped[List[ReplyOption]] = relationship(
+    reply_options: Mapped[list[ReplyOption]] = relationship(
         "ReplyOption",
         secondary=rule_reply_options,
         passive_deletes=True,

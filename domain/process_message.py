@@ -1,4 +1,4 @@
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from random import choice
 
@@ -10,7 +10,7 @@ from infrastructure.abstract.abstract_rule_repository import RuleRepository
 class ReplyService(ABC):
     @abstractmethod
     async def get_reply(self, input_message: str):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 @dataclass

@@ -1,4 +1,3 @@
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -20,10 +19,10 @@ class ReadRule(BaseModel):
 
 
 class CreateRule(BaseModel):
-    triggers: List[str] = Field(min_length=1)
-    reply_options: List[str] = Field(min_length=1)
+    triggers: list[str] = Field(min_length=1)
+    reply_options: list[str] = Field(min_length=1)
 
 
 class ExtendRule(BaseModel):
-    triggers: Optional[List[str]] = None
-    reply_options: Optional[List[str]] = None
+    triggers: list[str] | None = None
+    reply_options: list[str] | None = None

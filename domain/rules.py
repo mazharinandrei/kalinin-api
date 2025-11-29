@@ -20,7 +20,7 @@ class RuleService(CRUDService):
         ]
 
         rule_entity = RuleEntity(
-            triggers=trigger_entities, reply_options=reply_option_entities
+            triggers=trigger_entities, reply_options=reply_option_entities,
         )
 
         saved_entity = await self.repository.save(rule_entity)
@@ -34,7 +34,7 @@ class RuleService(CRUDService):
         ]
 
         rule_entity = RuleEntity(
-            id=pk, triggers=trigger_entities, reply_options=reply_option_entities
+            id=pk, triggers=trigger_entities, reply_options=reply_option_entities,
         )
 
         saved_entity = await self.repository.save(rule_entity)

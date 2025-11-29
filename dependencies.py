@@ -10,7 +10,7 @@ from infrastructure.alchemy.mappers.trigger_mapper import SQLAlchemyTriggerMappe
 from infrastructure.alchemy.mappers.universal_reply_mapper import (
     SQLAlchemyUniversalReplyMapper,
 )
-from infrastructure.alchemy.models.rule import Rule, Trigger, ReplyOption
+from infrastructure.alchemy.models.rule import ReplyOption, Rule, Trigger
 from infrastructure.alchemy.models.universal_reply import UniversalReply
 from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRepository
 from infrastructure.alchemy.repositories.rule_repository import SQLAlchemyRuleRepository
@@ -22,7 +22,7 @@ def universal_replies_service() -> CRUDService:
             model=UniversalReply,
             session=async_session_maker(),
             mapper=SQLAlchemyUniversalReplyMapper,
-        )
+        ),
     )
 
 
@@ -30,13 +30,13 @@ def rules_service() -> RuleService:
     session = async_session_maker()
     return RuleService(
         repository=SQLAlchemyRuleRepository(
-            model=Rule, session=session, mapper=SQLAlchemyRuleMapper
+            model=Rule, session=session, mapper=SQLAlchemyRuleMapper,
         ),
         trigger_repository=SQLAlchemyCRUDRepository(
-            model=Trigger, session=session, mapper=SQLAlchemyTriggerMapper
+            model=Trigger, session=session, mapper=SQLAlchemyTriggerMapper,
         ),
         reply_option_repository=SQLAlchemyCRUDRepository(
-            model=ReplyOption, session=session, mapper=SQLAlchemyReplyOptionMapper
+            model=ReplyOption, session=session, mapper=SQLAlchemyReplyOptionMapper,
         ),
     )
 
@@ -50,5 +50,5 @@ def reply_service() -> ReplyService:
             model=UniversalReply,
             session=async_session_maker(),
             mapper=SQLAlchemyUniversalReplyMapper,
-        )
+        ),
     )

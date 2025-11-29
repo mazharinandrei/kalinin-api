@@ -1,10 +1,10 @@
-from sqlalchemy import select, or_, func
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import joinedload
 
 from domain.enities.rule import RuleEntity
 from domain.enities.trigger import TriggerEntity
 from infrastructure.abstract.abstract_rule_repository import RuleRepository
-from infrastructure.alchemy.models.rule import Trigger, ReplyOption, Rule
+from infrastructure.alchemy.models.rule import ReplyOption, Rule, Trigger
 from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRepository
 
 
@@ -14,7 +14,7 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
         patterns = triggers
 
         conditions = [
-            func.lower(pattern).like('%' + func.lower(Trigger.text) + '%')
+            func.lower(pattern).like("%" + func.lower(Trigger.text) + "%")
             for pattern in patterns
         ]
 
@@ -41,9 +41,9 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
         existing_orm_objects = await self.session.execute(
             select(model).where(
                 getattr(model, unique_field).in_(
-                    [getattr(entity, unique_field) for entity in entities]
-                )
-            )
+                    [getattr(entity, unique_field) for entity in entities],
+                ),
+            ),
         )
 
         existing_orm_objects = existing_orm_objects.scalars()
@@ -56,11 +56,11 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
         for entity in entities:
             if getattr(entity, unique_field) in orm_objects_by_unique_field:
                 orm_objects.append(
-                    orm_objects_by_unique_field[getattr(entity, unique_field)]
+                    orm_objects_by_unique_field[getattr(entity, unique_field)],
                 )
             else:
                 orm_objects.append(
-                    model(**{unique_field: getattr(entity, unique_field)})
+                    model(**{unique_field: getattr(entity, unique_field)}),
                 )
 
         return orm_objects
@@ -69,7 +69,7 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
 
         if entity.id:
             rule_orm = await self.session.execute(
-                select(self.model).filter_by(id=entity.id)
+                select(self.model).filter_by(id=entity.id),
             )
             rule_orm = rule_orm.scalar_one_or_none()
 
@@ -77,10 +77,10 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
             rule_orm = self.model()
 
         rule_orm.triggers = await self._bulk_get_or_create(
-            entities=entity.triggers, model=Trigger, unique_field="text"
+            entities=entity.triggers, model=Trigger, unique_field="text",
         )
         rule_orm.reply_options = await self._bulk_get_or_create(
-            model=ReplyOption, entities=entity.reply_options, unique_field="text"
+            model=ReplyOption, entities=entity.reply_options, unique_field="text",
         )
 
         self.session.add(rule_orm)
