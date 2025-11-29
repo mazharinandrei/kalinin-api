@@ -7,7 +7,7 @@ from dependencies import universal_replies_service
 from domain.crud import CRUDService
 from schemas.schemas import CreateUniversalReply
 
-router = APIRouter(prefix="", tags=["Universal responses"])
+router = APIRouter(prefix="", tags=["Universal replies"])
 
 
 @router.get("/universal-replies")
