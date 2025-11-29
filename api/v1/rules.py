@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from dependencies import rules_service
-from domain.rules import RuleService
+from domain.rule_based.rule_service import RuleService
 from schemas.rules import CreateRule, ExtendRule
 
 router = APIRouter(prefix="", tags=["Rules"])

@@ -1,5 +1,7 @@
 from domain.enities.trigger import TriggerEntity
-from infrastructure.abstract.abstract_sqlalchemy_mapper import AbstractSQLAlchemyMapper
+from infrastructure.alchemy.mappers.abstract_sqlalchemy_mapper import (
+    AbstractSQLAlchemyMapper,
+)
 from infrastructure.alchemy.models.rule import Trigger
 
 

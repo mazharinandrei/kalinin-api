@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from dependencies import reply_service
-from domain.process_message import ReplyService
+from domain.rule_based.rule_based_reply_service import ReplyService
 from schemas.message import Message
 
 router = APIRouter(prefix="", tags=["Process message"])

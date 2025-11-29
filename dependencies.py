@@ -1,6 +1,9 @@
 from domain.crud import CRUDService
-from domain.process_message import ReplyService, RuleBasedReplyService
-from domain.rules import RuleService
+from domain.rule_based.rule_based_reply_service import (
+    ReplyService,
+    RuleBasedReplyService,
+)
+from domain.rule_based.rule_service import RuleService
 from infrastructure.alchemy.db import async_session_maker
 from infrastructure.alchemy.mappers.reply_option_mapper import (
     SQLAlchemyReplyOptionMapper,

@@ -3,7 +3,7 @@ from sqlalchemy.orm import joinedload
 
 from domain.enities.rule import RuleEntity
 from domain.enities.trigger import TriggerEntity
-from infrastructure.abstract.abstract_rule_repository import RuleRepository
+from domain.rule_based.abstract_rule_repository import RuleRepository
 from infrastructure.alchemy.models.rule import ReplyOption, Rule, Trigger
 from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRepository
 

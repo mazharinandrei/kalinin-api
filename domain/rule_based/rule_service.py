@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
+from domain.abstract_repository import Repository
 from domain.crud import CRUDService
 from domain.enities.reply_option import ReplyOptionEntity
 from domain.enities.rule import RuleEntity
 from domain.enities.trigger import TriggerEntity
-from infrastructure.abstract.abstract_repository import Repository
 
 
 @dataclass

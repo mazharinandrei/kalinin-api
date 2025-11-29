@@ -1,16 +1,10 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from random import choice
 
+from domain.abstract_repository import Repository
 from domain.enities.rule import RuleEntity
-from infrastructure.abstract.abstract_repository import Repository
-from infrastructure.abstract.abstract_rule_repository import RuleRepository
-
-
-class ReplyService(ABC):
-    @abstractmethod
-    async def get_reply(self, input_message: str):
-        raise NotImplementedError
+from domain.reply_service import ReplyService
+from domain.rule_based.abstract_rule_repository import RuleRepository
 
 
 @dataclass

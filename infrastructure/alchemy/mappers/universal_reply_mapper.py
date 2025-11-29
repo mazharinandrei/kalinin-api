@@ -1,5 +1,7 @@
 from domain.enities.universal_reply import UniversalReplyEntity
-from infrastructure.abstract.abstract_sqlalchemy_mapper import AbstractSQLAlchemyMapper
+from infrastructure.alchemy.mappers.abstract_sqlalchemy_mapper import (
+    AbstractSQLAlchemyMapper,
+)
 from infrastructure.alchemy.models.universal_reply import UniversalReply
 
 

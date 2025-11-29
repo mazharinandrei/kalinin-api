@@ -2,7 +2,7 @@ from collections.abc import Iterable, Mapping
 
 from sqlalchemy import insert, select
 
-from infrastructure.abstract.abstract_repository import Repository
+from domain.abstract_repository import Repository
 
 
 class SQLAlchemyCRUDRepository(Repository):

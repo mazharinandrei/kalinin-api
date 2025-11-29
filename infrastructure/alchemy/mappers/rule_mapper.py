@@ -1,5 +1,7 @@
 from domain.enities.rule import RuleEntity
-from infrastructure.abstract.abstract_sqlalchemy_mapper import AbstractSQLAlchemyMapper
+from infrastructure.alchemy.mappers.abstract_sqlalchemy_mapper import (
+    AbstractSQLAlchemyMapper,
+)
 from infrastructure.alchemy.mappers.reply_option_mapper import (
     SQLAlchemyReplyOptionMapper,
 )

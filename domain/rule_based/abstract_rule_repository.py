@@ -1,8 +1,8 @@
 from abc import abstractmethod
 
+from domain.abstract_repository import Repository
 from domain.enities.rule import RuleEntity
 from domain.enities.trigger import TriggerEntity
-from infrastructure.abstract.abstract_repository import Repository
 
 
 class RuleRepository(Repository):

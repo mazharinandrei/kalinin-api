@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from infrastructure.abstract.abstract_repository import Repository
+from domain.abstract_repository import Repository
 
 
 @dataclass
