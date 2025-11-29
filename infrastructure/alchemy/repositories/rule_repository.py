@@ -1,11 +1,37 @@
-from sqlalchemy import select
+from sqlalchemy import select, or_
+from sqlalchemy.orm import joinedload
 
 from domain.enities.rule import RuleEntity
-from infrastructure.alchemy.models.rule import Trigger, ReplyOption
+from domain.enities.trigger import TriggerEntity
+from infrastructure.abstract.abstract_rule_repository import RuleRepository
+from infrastructure.alchemy.models.rule import Trigger, ReplyOption, Rule
 from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRepository
 
 
-class SQLAlchemyRuleRepository(SQLAlchemyCRUDRepository):
+class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
+
+    async def find_by_triggers(self, triggers: list[TriggerEntity]) -> tuple[RuleEntity]:
+        patterns = triggers
+
+        like_conditions = [
+            Trigger.text.like(f"%{p}%") for p in patterns
+        ]
+
+        stmt = (
+            select(Rule)
+            .join(Rule.triggers)
+            .join(Rule.reply_options)
+            .options(
+                joinedload(Rule.triggers),
+                joinedload(Rule.reply_options),
+            )
+            .where(or_(*like_conditions))
+            .distinct()
+        )
+
+        result = await self.session.scalars(stmt)
+        result = result.unique().all()
+        return tuple(self.mapper.to_entity(orm) for orm in result)
 
     async def _bulk_get_or_create(self, model, entities, unique_field):
 
