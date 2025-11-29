@@ -5,7 +5,7 @@ from starlette import status
 
 from dependencies import universal_replies_service
 from domain.crud import CRUDService
-from schemas.schemas import CreateUniversalReply
+from schemas.universal_replies import CreateUniversalReply
 
 router = APIRouter(prefix="", tags=["Universal replies"])
 
