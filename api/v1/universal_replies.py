@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from api.v1.api_spec import UniversalReplySpec
 from dependencies import universal_replies_service
 from domain.crud import CRUDService
 from schemas.universal_replies import CreateUniversalReply
@@ -10,7 +11,7 @@ from schemas.universal_replies import CreateUniversalReply
 router = APIRouter(prefix="", tags=["Universal replies"])
 
 
-@router.get("/universal-replies")
+@router.get("/universal-replies", description=UniversalReplySpec.LIST_DESCRIPTION)
 async def list_universal_replies(
     service: Annotated[CRUDService, Depends(universal_replies_service)],
 ) -> dict:
@@ -19,7 +20,7 @@ async def list_universal_replies(
     return {"data": res}
 
 
-@router.post("/universal-replies")
+@router.post("/universal-replies", description=UniversalReplySpec.CREATE_DESCRIPTION)
 async def add_universal_reply(
     universal_reply: CreateUniversalReply,
     service: Annotated[CRUDService, Depends(universal_replies_service)],
@@ -28,7 +29,10 @@ async def add_universal_reply(
     return {"data": new_obj}
 
 
-@router.get("/universal-replies/{reply_id}")
+@router.get(
+    "/universal-replies/{reply_id}",
+    description=UniversalReplySpec.DETAIL_DESCRIPTION,
+)
 async def detail_universal_reply(
     reply_id: int,
     service: Annotated[CRUDService, Depends(universal_replies_service)],
@@ -41,7 +45,10 @@ async def detail_universal_reply(
     return {"data": reply}
 
 
-@router.patch("/universal-replies/{reply_id}")
+@router.patch(
+    "/universal-replies/{reply_id}",
+    description=UniversalReplySpec.UPDATE_DESCRIPTION,
+)
 async def update_universal_reply(
     response_id: int,
     universal_reply: CreateUniversalReply,
@@ -51,7 +58,11 @@ async def update_universal_reply(
     return {"data": updated}
 
 
-@router.delete("/universal-replies/{reply_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/universal-replies/{reply_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    description=UniversalReplySpec.DELETE_DESCRIPTION,
+)
 async def delete_universal_reply(
     response_id: int,
     service: Annotated[CRUDService, Depends(universal_replies_service)],

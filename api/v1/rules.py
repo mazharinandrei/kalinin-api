@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
+from api.v1.api_spec import RuleSpec
 from dependencies import rules_service
 from domain.rule_based.rule_service import RuleService
 from schemas.rules import CreateRule, ExtendRule
@@ -10,7 +11,7 @@ from schemas.rules import CreateRule, ExtendRule
 router = APIRouter(prefix="", tags=["Rules"])
 
 
-@router.get("/rules")
+@router.get("/rules", description=RuleSpec.LIST_DESCRIPTION)
 async def list_rules(
     service: Annotated[RuleService, Depends(rules_service)],
 ) -> dict:
@@ -19,7 +20,7 @@ async def list_rules(
     return {"data": res}
 
 
-@router.get("/rules/{rule_id}")
+@router.get("/rules/{rule_id}", description=RuleSpec.DETAIL_DESCRIPTION)
 async def detail_rule(
     rule_id: int,
     service: Annotated[RuleService, Depends(rules_service)],
@@ -32,7 +33,7 @@ async def detail_rule(
     return {"data": rule}
 
 
-@router.post("/rules")
+@router.post("/rules", description=RuleSpec.CREATE_DESCRIPTION)
 async def add_rule(
     rule: CreateRule,
     service: Annotated[RuleService, Depends(rules_service)],
@@ -41,7 +42,7 @@ async def add_rule(
     return {"data": new_obj}
 
 
-@router.put("/rules/{rule_id}")
+@router.put("/rules/{rule_id}", description=RuleSpec.UPDATE_DESCRIPTION)
 async def update_rule(
     rule_id: int,
     rule: CreateRule,
@@ -51,7 +52,7 @@ async def update_rule(
     return {"data": updated}
 
 
-@router.patch("/rules/{rule_id}")
+@router.patch("/rules/{rule_id}", description=RuleSpec.EXTEND_DESCRIPTION)
 async def extend_rule(
     rule_id: int,
     rule: ExtendRule,
@@ -61,7 +62,11 @@ async def extend_rule(
     return {"data": updated}
 
 
-@router.delete("/rules/{rule_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/rules/{rule_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    description=RuleSpec.DELETE_DESCRIPTION,
+)
 async def delete_rule(
     rule_id: int,
     service: Annotated[RuleService, Depends(rules_service)],

@@ -10,7 +10,7 @@ from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRe
 
 class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
     async def find_by_triggers(
-        self, triggers: list[TriggerEntity]
+        self, triggers: list[TriggerEntity],
     ) -> tuple[RuleEntity]:
         patterns = triggers
 

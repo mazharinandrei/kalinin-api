@@ -15,7 +15,7 @@ class RuleBasedReplyService(ReplyService):
 
     async def get_reply(self, input_message: str):
         rules: list[RuleEntity] = await self.rule_repository.find_by_triggers(
-            input_message.split()
+            input_message.split(),
         )
 
         all_options = [
