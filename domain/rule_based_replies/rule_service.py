@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from domain.abstract_repository import Repository
 from domain.abstract_uow import UnitOfWork
-from domain.crud import CRUDService
+from domain.crud_service import CRUDService
 from domain.enities.reply_option import ReplyOptionEntity
 from domain.enities.rule import RuleEntity
 from domain.enities.trigger import TriggerEntity

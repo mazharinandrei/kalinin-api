@@ -4,8 +4,8 @@ from random import choice
 from domain.abstract_repository import Repository
 from domain.abstract_uow import UnitOfWork
 from domain.enities.rule import RuleEntity
-from domain.reply_service import ReplyService
-from domain.rule_based.abstract_rule_repository import RuleRepository
+from domain.abstract_reply_service import ReplyService
+from domain.rule_based_replies.abstract_rule_repository import RuleRepository
 
 
 @dataclass

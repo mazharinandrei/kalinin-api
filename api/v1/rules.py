@@ -5,7 +5,7 @@ from starlette import status
 
 from api.v1.api_spec import RuleSpec
 from dependencies import rules_service
-from domain.rule_based.rule_service import RuleService
+from domain.rule_based_replies.rule_service import RuleService
 from schemas.rules import CreateRule, ExtendRule
 
 router = APIRouter(prefix="", tags=["Rules"])
