@@ -10,7 +10,7 @@ from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRe
 
 class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
     async def find_by_triggers(
-        self, triggers: list[TriggerEntity],
+        self, triggers: list[TriggerEntity], session
     ) -> tuple[RuleEntity]:
         patterns = triggers
 
@@ -31,14 +31,14 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
             .distinct()
         )
 
-        result = await self.session.scalars(stmt)
+        result = await session.scalars(stmt)
         result = result.unique().all()
         return tuple(self.mapper.to_entity(orm) for orm in result)
 
-    async def _bulk_get_or_create(self, model, entities, unique_field):
+    async def _bulk_get_or_create(self, session, model, entities, unique_field):
         orm_objects = []
 
-        existing_orm_objects = await self.session.execute(
+        existing_orm_objects = await session.execute(
             select(model).where(
                 getattr(model, unique_field).in_(
                     [getattr(entity, unique_field) for entity in entities],
@@ -65,9 +65,9 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
 
         return orm_objects
 
-    async def save(self, entity: RuleEntity):
+    async def save(self, session, entity: RuleEntity):
         if entity.id:
-            rule_orm = await self.session.execute(
+            rule_orm = await session.execute(
                 select(self.model).filter_by(id=entity.id),
             )
             rule_orm = rule_orm.scalar_one_or_none()
@@ -79,16 +79,18 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
             entities=entity.triggers,
             model=Trigger,
             unique_field="text",
+            session=session,
         )
         rule_orm.reply_options = await self._bulk_get_or_create(
             model=ReplyOption,
             entities=entity.reply_options,
             unique_field="text",
+            session=session,
         )
 
-        self.session.add(rule_orm)
+        session.add(rule_orm)
 
-        await self.session.commit()
+        await session.flush()
 
         return self.mapper.to_entity(rule_orm)
 

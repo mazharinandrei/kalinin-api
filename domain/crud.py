@@ -1,28 +1,35 @@
 from dataclasses import dataclass
 
 from domain.abstract_repository import Repository
+from domain.abstract_uow import UnitOfWork
 
 
 @dataclass
 class CRUDService:
     repository: Repository
+    uow: UnitOfWork
 
     async def create(self, data: dict):
-        res = await self.repository.create(**data)
-        return res
+        async with self.uow.begin() as session:
+            res = await self.repository.create(session, **data)
+            return res
 
     async def list(self):
-        res = await self.repository.list()
-        return res
+        async with self.uow.begin() as session:
+            res = await self.repository.list(session=session)
+            return res
 
     async def get(self, pk):
-        res = await self.repository.get(id=pk)
-        return res
+        async with self.uow.begin() as session:
+            res = await self.repository.get(id=pk, session=session)
+            return res
 
     async def update(self, pk, **data):
-        res = await self.repository.update(pk=pk, **data)
-        return res
+        async with self.uow.begin() as session:
+            res = await self.repository.update(pk=pk, session=session, **data)
+            return res
 
     async def delete(self, pk):
-        res = await self.repository.delete(pk=pk)
-        return res
+        async with self.uow.begin() as session:
+            res = await self.repository.delete(pk=pk, session=session)
+            return res

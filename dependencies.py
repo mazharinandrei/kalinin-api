@@ -4,7 +4,6 @@ from domain.rule_based.rule_based_reply_service import (
     RuleBasedReplyService,
 )
 from domain.rule_based.rule_service import RuleService
-from infrastructure.alchemy.db import async_session_maker
 from infrastructure.alchemy.mappers.reply_option_mapper import (
     SQLAlchemyReplyOptionMapper,
 )
@@ -17,51 +16,50 @@ from infrastructure.alchemy.models.rule import ReplyOption, Rule, Trigger
 from infrastructure.alchemy.models.universal_reply import UniversalReply
 from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRepository
 from infrastructure.alchemy.repositories.rule_repository import SQLAlchemyRuleRepository
+from infrastructure.alchemy.uow import AlchemyUnitOfWork
 
 
 def universal_replies_service() -> CRUDService:
     return CRUDService(
         repository=SQLAlchemyCRUDRepository(
             model=UniversalReply,
-            session=async_session_maker(),
             mapper=SQLAlchemyUniversalReplyMapper,
         ),
+        uow=AlchemyUnitOfWork(),
     )
 
 
 def rules_service() -> RuleService:
-    session = async_session_maker()
     return RuleService(
         repository=SQLAlchemyRuleRepository(
             model=Rule,
-            session=session,
             mapper=SQLAlchemyRuleMapper,
         ),
         trigger_repository=SQLAlchemyCRUDRepository(
             model=Trigger,
-            session=session,
             mapper=SQLAlchemyTriggerMapper,
         ),
         reply_option_repository=SQLAlchemyCRUDRepository(
             model=ReplyOption,
-            session=session,
             mapper=SQLAlchemyReplyOptionMapper,
         ),
+        uow=AlchemyUnitOfWork(),
     )
 
 
 def reply_service() -> ReplyService:
-    session = async_session_maker()
     return RuleBasedReplyService(
         trigger_repository=SQLAlchemyCRUDRepository(
-            model=Trigger, session=session, mapper=SQLAlchemyTriggerMapper,
+            model=Trigger,
+            mapper=SQLAlchemyTriggerMapper,
         ),
         rule_repository=SQLAlchemyRuleRepository(
-            model=Rule, session=session, mapper=SQLAlchemyRuleMapper,
+            model=Rule,
+            mapper=SQLAlchemyRuleMapper,
         ),
         universal_reply_repository=SQLAlchemyCRUDRepository(
             model=UniversalReply,
-            session=async_session_maker(),
             mapper=SQLAlchemyUniversalReplyMapper,
         ),
+        uow=AlchemyUnitOfWork(),
     )
