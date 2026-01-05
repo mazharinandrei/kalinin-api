@@ -41,3 +41,16 @@ class ProcessMessageSpec:
             },
         },
     }
+
+
+class RollDiceSpec:
+    CREATE_DESCRIPTION = ""
+    DETAIL_DESCRIPTION = ""
+    LIST_DESCRIPTION = ""
+    UPDATE_DESCRIPTION = ""
+    EXTEND_DESCRIPTION = ""
+    DELETE_DESCRIPTION = ""
+
+    TEXT_EXAMPLE = (
+        "Here is your interpretation of the number falling on the dice in this range..."
+    )

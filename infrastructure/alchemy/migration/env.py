@@ -10,6 +10,7 @@ from config import settings
 from infrastructure.alchemy.db import Base
 from infrastructure.alchemy.models.rule import ReplyOption, Rule, Trigger  # noqa: F401
 from infrastructure.alchemy.models.universal_reply import UniversalReply  # noqa: F401
+from infrastructure.alchemy.models.roll_dice_range import RollDiceRange  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
