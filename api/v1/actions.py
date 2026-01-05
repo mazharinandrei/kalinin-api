@@ -7,7 +7,7 @@ from dependencies import reply_service
 from domain.rule_based_replies.rule_based_reply_service import ReplyService
 from schemas.message import Message
 
-router = APIRouter(prefix="", tags=["Process message"])
+router = APIRouter(prefix="", tags=["Actions"])
 
 
 @router.post(
