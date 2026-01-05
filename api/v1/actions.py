@@ -11,7 +11,7 @@ router = APIRouter(prefix="", tags=["Actions"])
 
 
 @router.post(
-    "/process_message",
+    "/messages",
     responses=ProcessMessageSpec.RESPONSES,
     description=ProcessMessageSpec.DESCRIPTION,
 )
