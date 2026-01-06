@@ -3,10 +3,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from api.v1.api_spec import ProcessMessageSpec
-from dependencies import reply_service, roll_dice_service
+from dependencies import reply_service, roll_dice_service, brick_translate_service
 from domain.roll_dice.roll_dice_service import RollDiceService
 from domain.rule_based_replies.rule_based_reply_service import ReplyService
+from domain.translate_brick.brick_translate_service import BrickTranslateService
 from schemas.message import Message
+from schemas.translate import BrickTranslateInput
 
 router = APIRouter(prefix="", tags=["Actions"])
 
@@ -31,3 +33,12 @@ async def roll_dice(
 ) -> dict:
     roll = await service.roll()
     return {"data": roll}
+
+
+@router.post("/brick-translate")
+async def translate_to_brick(
+    data: BrickTranslateInput,
+    service: Annotated[BrickTranslateService, Depends(brick_translate_service)],
+) -> dict:
+    result = await service.translate(dialect=data.dialect, text=data.input_text)
+    return {"data": result}

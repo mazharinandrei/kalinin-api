@@ -5,6 +5,7 @@ from domain.rule_based_replies.rule_based_reply_service import (
     RuleBasedReplyService,
 )
 from domain.rule_based_replies.rule_service import RuleService
+from domain.translate_brick.brick_translate_service import BrickTranslateService
 from infrastructure.alchemy.mappers.reply_option_mapper import (
     SQLAlchemyReplyOptionMapper,
 )
@@ -80,3 +81,7 @@ def roll_dice_service() -> RollDiceService:
         ),
         uow=AlchemyUnitOfWork(),
     )
+
+
+def brick_translate_service() -> BrickTranslateService:
+    return BrickTranslateService()
