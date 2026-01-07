@@ -15,5 +15,5 @@ class RollDiceService(CRUDService):
             )
             result = choice(result)
             return RollDiceResultEntity(
-                rolled_dice_value=rolled_dice_value, text=result.input_text
+                rolled_dice_value=rolled_dice_value, text=result.text
             )
