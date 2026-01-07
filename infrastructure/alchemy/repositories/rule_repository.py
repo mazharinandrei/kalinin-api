@@ -1,24 +1,14 @@
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, select
 from sqlalchemy.orm import joinedload
 
 from domain.enities.rule import RuleEntity
-from domain.enities.trigger import TriggerEntity
 from domain.rule_based_replies.abstract_rule_repository import RuleRepository
 from infrastructure.alchemy.models.rule import ReplyOption, Rule, Trigger
 from infrastructure.alchemy.repositories.crud_repository import SQLAlchemyCRUDRepository
 
 
 class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
-    async def find_by_triggers(
-        self, triggers: list[TriggerEntity], session
-    ) -> tuple[RuleEntity]:
-        patterns = triggers
-
-        conditions = [
-            func.lower(pattern).like("%" + func.lower(Trigger.text) + "%")
-            for pattern in patterns
-        ]
-
+    async def find_by_triggers(self, text: str, session) -> tuple[RuleEntity]:
         stmt = (
             select(Rule)
             .join(Rule.triggers)
@@ -27,7 +17,7 @@ class SQLAlchemyRuleRepository(RuleRepository, SQLAlchemyCRUDRepository):
                 joinedload(Rule.triggers),
                 joinedload(Rule.reply_options),
             )
-            .where(or_(*conditions))
+            .where(func.lower(text).like("%" + func.lower(Trigger.text) + "%"))
             .distinct()
         )
 

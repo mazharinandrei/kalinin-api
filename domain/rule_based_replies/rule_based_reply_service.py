@@ -19,7 +19,7 @@ class RuleBasedReplyService(ReplyService):
         async with self.uow.begin() as session:
             rules: list[RuleEntity] = await self.rule_repository.find_by_triggers(
                 session=session,
-                triggers=input_message.split(),
+                text=input_message,
             )
 
             all_options = [
